@@ -46,14 +46,18 @@ resource "azurerm_key_vault_secret" "redis_primary_key" {
 
 # Deploy ACR
 module "acr" {
-  source     = "./modules/acr"
-  name       = local.acr_name
-  location   = var.location
-  rg_name    = azurerm_resource_group.main.name
-  sku        = var.acr_sku
-  tags       = local.common_tags
-  git_pat    = var.git_pat
-  depends_on = [azurerm_resource_group.main]
+  source   = "./modules/acr"
+  name     = local.acr_name
+  location = var.location
+  rg_name  = azurerm_resource_group.main.name
+  sku      = var.acr_sku
+  tags     = local.common_tags
+  git_pat  = var.git_pat
+  depends_on = [
+    azurerm_resource_group.main,
+    module.redis,
+    module.keyvault
+  ]
 }
 
 # Deploy AKS

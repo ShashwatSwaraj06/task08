@@ -14,16 +14,19 @@ resource "azurerm_container_registry_task" "build_task" {
     os = "Linux"
   }
 
+  # Use local context instead of Git repo
+  source_location = "."
+
   docker_step {
-    dockerfile_path      = "Dockerfile"
-    context_path         = "https://github.com/your-repo/your-app#main"
-    context_access_token = var.git_pat
-    image_names          = ["${var.name}/${var.image_name}:latest"]
+    dockerfile_path = "Dockerfile"
+    image_names     = ["${var.name}/${var.image_name}:latest"]
+    context_path    = "application" # Path to your Docker build context
   }
 
   tags = var.tags
 }
-resource "azurerm_container_registry_task_schedule_run_now" "trigger" {
-  container_registry_task_id = azurerm_container_registry_task.build_task.id
-  depends_on                 = [azurerm_container_registry_task.build_task]
-}
+
+# resource "azurerm_container_registry_task_schedule_run_now" "trigger" {
+#   container_registry_task_id = azurerm_container_registry_task.build_task.id
+#   depends_on                 = [azurerm_container_registry_task.build_task]
+# }
