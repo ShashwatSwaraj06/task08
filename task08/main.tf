@@ -115,3 +115,10 @@ resource "kubectl_manifest" "service" {
   yaml_body  = file("${path.module}/k8s-manifests/service.yaml")
   depends_on = [kubectl_manifest.deployment]
 }
+
+data "kubernetes_service" "aks_service" {
+  metadata {
+    name = "${local.name_prefix}-service"
+  }
+  depends_on = [kubectl_manifest.service]
+}
