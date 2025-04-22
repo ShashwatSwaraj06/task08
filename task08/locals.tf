@@ -1,9 +1,13 @@
+# locals.tf
 locals {
   common_tags = {
     Creator = var.creator_tag
   }
 
-  # Resource names using prefix
+  # Add this line
+  name_prefix = var.name_prefix
+
+  # Rest of your existing locals
   rg_name       = "${var.name_prefix}-rg"
   aci_name      = "${var.name_prefix}-ci"
   acr_name      = replace("${var.name_prefix}cr", "-", "")
