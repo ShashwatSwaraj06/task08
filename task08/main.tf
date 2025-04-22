@@ -106,8 +106,9 @@ resource "kubectl_manifest" "secret_provider" {
 
 resource "kubectl_manifest" "deployment" {
   yaml_body = templatefile("${path.module}/k8s-manifests/deployment.yaml.tftpl", {
-    image_name     = "${module.acr.login_server}/${local.docker_image}:latest"
-    redis_hostname = module.redis.hostname
+    name_prefix    = var.name_prefix, # Added this line
+    image_name     = "${module.acr.login_server}/${local.docker_image}:latest",
+    redis_hostname = module.redis.hostname,
     redis_port     = "6380"
   })
   depends_on = [kubectl_manifest.secret_provider, module.acr]
