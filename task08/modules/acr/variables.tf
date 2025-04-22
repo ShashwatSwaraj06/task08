@@ -10,7 +10,7 @@ variable "rg_name" {
 
 variable "location" {
   type        = string
-  description = "Azure region where resources will be deployed"
+  description = "Azure region for the deployment"
 }
 
 variable "sku" {
@@ -20,13 +20,13 @@ variable "sku" {
 
 variable "tags" {
   type        = map(string)
-  description = "Resource tags to apply"
+  description = "Tags to apply to the container registry"
 }
 
 variable "git_pat" {
   type        = string
   sensitive   = true
-  description = "GitHub Personal Access Token for ACR build task authentication"
+  description = "GitHub Personal Access Token for ACR build authentication"
 }
 
 variable "image_name" {

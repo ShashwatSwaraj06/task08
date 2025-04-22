@@ -98,6 +98,8 @@ provider "kubectl" {
 resource "kubectl_manifest" "secret_provider" {
   yaml_body = templatefile("${path.module}/k8s-manifests/secret-provider.yaml.tftpl", {
     key_vault_name = local.keyvault_name
+    name_prefix    = var.name_prefix
+    tenant_id      = data.azurerm_client_config.current.tenant_id
   })
   depends_on = [module.aks]
 }
@@ -122,3 +124,5 @@ data "kubernetes_service" "aks_service" {
   }
   depends_on = [kubectl_manifest.service]
 }
+
+data "azurerm_client_config" "current" {}
