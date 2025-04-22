@@ -6,10 +6,10 @@ resource "azurerm_kubernetes_cluster" "aks" {
   tags                = var.tags
 
   default_node_pool {
-    name           = "system"
-    node_count     = var.node_count
-    vm_size        = var.vm_size
-    os_disk_type   = var.os_disk_type
+    name         = "system"
+    node_count   = var.node_count
+    vm_size      = var.vm_size
+    os_disk_type = var.os_disk_type
   }
 
   identity {

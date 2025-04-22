@@ -1,10 +1,10 @@
 resource "azurerm_container_registry" "acr" {
   name                = var.name
   resource_group_name = var.rg_name
-  location           = var.location
-  sku                = var.sku
-  admin_enabled      = true
-  tags               = var.tags
+  location            = var.location
+  sku                 = var.sku
+  admin_enabled       = true
+  tags                = var.tags
 }
 
 resource "azurerm_container_registry_task" "build_task" {
@@ -13,7 +13,7 @@ resource "azurerm_container_registry_task" "build_task" {
   platform {
     os = "Linux"
   }
-  
+
   docker_step {
     dockerfile_path      = "Dockerfile"
     context_path         = "https://github.com/your-repo/your-app#main"
@@ -26,5 +26,5 @@ resource "azurerm_container_registry_task" "build_task" {
 
 resource "azurerm_container_registry_task_schedule_run_now" "trigger" {
   container_registry_task_id = azurerm_container_registry_task.build_task.id
-  depends_on = [azurerm_container_registry_task.build_task]
+  depends_on                 = [azurerm_container_registry_task.build_task]
 }

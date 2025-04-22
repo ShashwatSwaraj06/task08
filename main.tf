@@ -58,31 +58,31 @@ module "acr" {
 
 # Deploy AKS
 module "aks" {
-  source               = "./modules/aks"
-  name                 = local.aks_name
-  location             = var.location
-  rg_name              = azurerm_resource_group.main.name
-  node_count           = 1
-  vm_size              = "Standard_D2ads_v5"
-  os_disk_type         = "Ephemeral"
-  acr_id               = module.acr.id
-  key_vault_id         = module.keyvault.id
-  tags                 = local.common_tags
-  depends_on           = [module.acr, module.keyvault]
+  source       = "./modules/aks"
+  name         = local.aks_name
+  location     = var.location
+  rg_name      = azurerm_resource_group.main.name
+  node_count   = 1
+  vm_size      = "Standard_D2ads_v5"
+  os_disk_type = "Ephemeral"
+  acr_id       = module.acr.id
+  key_vault_id = module.keyvault.id
+  tags         = local.common_tags
+  depends_on   = [module.acr, module.keyvault]
 }
 
 # Deploy ACI
 module "aci" {
-  source               = "./modules/aci"
-  name                 = local.aci_name
-  location             = var.location
-  rg_name              = azurerm_resource_group.main.name
-  acr_login_server     = module.acr.login_server
-  image_name           = "${local.docker_image}:latest"
-  redis_hostname       = azurerm_key_vault_secret.redis_hostname.value
-  redis_primary_key    = azurerm_key_vault_secret.redis_primary_key.value
-  tags                 = local.common_tags
-  depends_on           = [module.acr, module.keyvault, module.redis]
+  source            = "./modules/aci"
+  name              = local.aci_name
+  location          = var.location
+  rg_name           = azurerm_resource_group.main.name
+  acr_login_server  = module.acr.login_server
+  image_name        = "${local.docker_image}:latest"
+  redis_hostname    = azurerm_key_vault_secret.redis_hostname.value
+  redis_primary_key = azurerm_key_vault_secret.redis_primary_key.value
+  tags              = local.common_tags
+  depends_on        = [module.acr, module.keyvault, module.redis]
 }
 
 # Configure kubectl provider
@@ -112,6 +112,6 @@ resource "kubectl_manifest" "deployment" {
 }
 
 resource "kubectl_manifest" "service" {
-  yaml_body = file("${path.module}/k8s-manifests/service.yaml")
+  yaml_body  = file("${path.module}/k8s-manifests/service.yaml")
   depends_on = [kubectl_manifest.deployment]
 }
