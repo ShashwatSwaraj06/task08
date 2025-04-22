@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ${var.name_prefix}-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ${var.name_prefix}-app
+  template:
+    metadata:
+      labels:
+        app: ${var.name_prefix}-app
+    spec:
+      containers:
+      - name: ${var.name_prefix}-app
+        image: ${image_name}
+        ports:
+        - containerPort: 80
+        env:
+        - name: CREATOR
+          value: "K8S"
+        - name: REDIS_PORT
+          value: "6380"
+        - name: REDIS_SSL_MODE
+          value: "True"
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: redis-secrets
+              key: hostname
+        - name: REDIS_PWD
+          valueFrom:
+            secretKeyRef:
+              name: redis-secrets
+              key: primary-key
+      volumes:
+      - name: secrets-store-inline
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "azure-kv-${var.name_prefix}"
