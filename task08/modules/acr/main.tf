@@ -23,7 +23,6 @@ resource "azurerm_container_registry_task" "build_task" {
 
   tags = var.tags
 }
-
 resource "azurerm_container_registry_task_schedule_run_now" "trigger" {
   container_registry_task_id = azurerm_container_registry_task.build_task.id
   depends_on                 = [azurerm_container_registry_task.build_task]

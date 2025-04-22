@@ -3,6 +3,7 @@ locals {
     Creator = var.creator_tag
   }
 
+  # Resource names using prefix
   rg_name       = "${var.name_prefix}-rg"
   aci_name      = "${var.name_prefix}-ci"
   acr_name      = replace("${var.name_prefix}cr", "-", "")
