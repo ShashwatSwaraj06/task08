@@ -89,7 +89,7 @@ module "acr" {
   os_type                 = "Linux"
   sku                     = "Basic"
   registrytask_name       = azurerm_resource_group.main.name
-  git_pat                 = "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"
+  git_pat                 = var.git_pat
   location                = var.location
   depends_on = [
     module.redis,

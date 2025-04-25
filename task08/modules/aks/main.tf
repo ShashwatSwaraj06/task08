@@ -22,9 +22,6 @@ resource "azurerm_kubernetes_cluster" "aks_cluster" {
   kubernetes_version = var.kubernetes_version
 
   tags = var.tags
-  # depends_on = [
-  #   azurerm_role_assignment.aks_acr_pull
-  # ]
 }
 
 
