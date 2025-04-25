@@ -33,9 +33,9 @@ resource "azurerm_user_assigned_identity" "example" {
 
 # Role assignment: Allow AKS to pull from ACR
 resource "azurerm_role_assignment" "aks_acr_pull" {
-  scope                = var.acr_id
-  role_definition_name = "AcrPull"
-  principal_id         = azurerm_user_assigned_identity.example.principal_id
+  scope                            = var.acr_id
+  role_definition_name             = "AcrPull"
+  principal_id                     = azurerm_user_assigned_identity.example.principal_id
   skip_service_principal_aad_check = true
 }
 
@@ -59,8 +59,8 @@ resource "azurerm_key_vault_access_policy" "aks_kv_access" {
 data "azurerm_client_config" "current" {}
 
 resource "azurerm_role_assignment" "key_vault_secret" {
-  principal_id  = azurerm_kubernetes_cluster.aks_cluster.kubelet_identity[0].object_id
-  role_definition_name = "Key Vault Secrets User"
-  scope = var.key_vault_id
+  principal_id                     = azurerm_kubernetes_cluster.aks_cluster.kubelet_identity[0].object_id
+  role_definition_name             = "Key Vault Secrets User"
+  scope                            = var.key_vault_id
   skip_service_principal_aad_check = true
 }

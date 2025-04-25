@@ -20,10 +20,11 @@ variable "os_type" {
 }
 
 variable "git_pat" {
-  description = "value"
+  description = "GitHub Personal Access Token"
   type        = string
   sensitive   = true
 }
+
 
 variable "resource_group_name" {
   description = "Name of the resource group"

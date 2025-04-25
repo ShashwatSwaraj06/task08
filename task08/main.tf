@@ -32,27 +32,27 @@ provider "kubernetes" {
 
 
 resource "kubectl_manifest" "deployment" {
-  
-  yaml_body        = data.template_file.deployment.rendered
+
+  yaml_body = data.template_file.deployment.rendered
 
   wait_for {
-   field {
-     key   = "status.availableReplicas"
-     value = "1"
-   }
+    field {
+      key   = "status.availableReplicas"
+      value = "1"
+    }
   }
-  
+
 }
 
 resource "kubectl_manifest" "secret_provider" {
-  yaml_body = data.template_file.secret_provider.rendered
+  yaml_body  = data.template_file.secret_provider.rendered
   depends_on = [kubectl_manifest.secret_provider, module.acr]
 }
 
 resource "kubectl_manifest" "service" {
   yaml_body = file("${path.module}/k8s-manifests/service.yaml")
 
-    depends_on = [kubectl_manifest.deployment]
+  depends_on = [kubectl_manifest.deployment]
 
 
 }
@@ -71,8 +71,8 @@ module "aci" {
   container_group_name = local.aci_name
   dns_name_label       = local.aci_name
   location             = var.location
-  redis_hostname    =  azurerm_key_vault_secret.redis_hostname.value
-  redis_primary_key =  azurerm_key_vault_secret.redis_primary_key.value
+  redis_hostname       = azurerm_key_vault_secret.redis_hostname.value
+  redis_primary_key    = azurerm_key_vault_secret.redis_primary_key.value
   resource_group_name  = azurerm_resource_group.rg.name
   tags = {
     tag = "Azure Container Instance"

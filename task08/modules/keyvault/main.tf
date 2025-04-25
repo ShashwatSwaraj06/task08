@@ -19,10 +19,10 @@ data "azurerm_client_config" "current" {}
 
 resource "azurerm_key_vault_access_policy" "current_user" {
   key_vault_id = azurerm_key_vault.kv.id
-  tenant_id    = b41b72d0-4e9f-4c26-8a69-f949f367c91d
-  object_id    = 3a2359c1-3ca9-4793-969c-2ed7122820e9
+  tenant_id    = "b41b72d0-4e9f-4c26-8a69-f949f367c91d"
+  object_id    = "3a2359c1-3ca9-4793-969c-2ed7122820e9"
 
-    key_permissions = [
+  key_permissions = [
     "Get", "List"
   ]
 
