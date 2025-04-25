@@ -1,24 +1,19 @@
 variable "name" {
+  description = "The name of the Key Vault"
   type        = string
-  description = "Name of the Key Vault"
-}
-
-variable "rg_name" {
-  type        = string
-  description = "Name of the resource group where Key Vault will be deployed"
 }
 
 variable "location" {
+  description = "The Azure region where the Key Vault will be deployed"
   type        = string
-  description = "Azure region for the deployment"
 }
 
-variable "sku" {
+variable "resource_group_name" {
+  description = "The name of the resource group"
   type        = string
-  description = "SKU name for Key Vault (standard or premium)"
 }
 
 variable "tags" {
+  description = "value"
   type        = map(string)
-  description = "Tags to apply to the Key Vault"
 }

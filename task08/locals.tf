@@ -1,11 +1,9 @@
 # locals.tf
 locals {
   common_tags = {
-    Creator = var.creator_tag
+    Creator = "shashwat_swaraj@epam.com"
   }
 
-  # Add this line
-  name_prefix = var.name_prefix
 
   # Rest of your existing locals
   rg_name       = "${var.name_prefix}-rg"

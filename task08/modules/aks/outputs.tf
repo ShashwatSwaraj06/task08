@@ -1,28 +1,18 @@
+output "kubelet_identity_id" {
+  value = azurerm_kubernetes_cluster.aks_cluster.kubelet_identity[0].object_id
+}
+
 output "kube_config" {
-  description = "Kubernetes configuration for connecting to the cluster"
-  value       = azurerm_kubernetes_cluster.aks.kube_config
-  sensitive   = true
+  description = "The Kube config credentials for the AKS cluster"
+  value       = azurerm_kubernetes_cluster.aks_cluster.kube_config[0].host
 }
 
-output "host" {
-  description = "Kubernetes API server host"
-  value       = azurerm_kubernetes_cluster.aks.kube_config[0].host
+output "aks_name" {
+  description = "The name of the AKS cluster"
+  value       = azurerm_kubernetes_cluster.aks_cluster.name
 }
 
-output "client_certificate" {
-  description = "Client certificate for authenticating to the cluster"
-  value       = base64decode(azurerm_kubernetes_cluster.aks.kube_config[0].client_certificate)
-  sensitive   = true
-}
-
-output "client_key" {
-  description = "Client key for authenticating to the cluster"
-  value       = base64decode(azurerm_kubernetes_cluster.aks.kube_config[0].client_key)
-  sensitive   = true
-}
-
-output "cluster_ca_certificate" {
-  description = "Cluster CA certificate"
-  value       = base64decode(azurerm_kubernetes_cluster.aks.kube_config[0].cluster_ca_certificate)
-  sensitive   = true
+output "resource_group_name" {
+  description = "The resource group name where the AKS cluster is deployed"
+  value       = azurerm_kubernetes_cluster.aks_cluster.resource_group_name
 }

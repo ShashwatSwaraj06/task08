@@ -1,32 +1,28 @@
 resource "azurerm_container_registry" "acr" {
-  name                = var.name
-  resource_group_name = var.rg_name
+  name                = var.container_registry_name
+  resource_group_name = var.resource_group_name
   location            = var.location
   sku                 = var.sku
-  admin_enabled       = true
-  tags                = var.tags
 }
 
-resource "azurerm_container_registry_task" "build_task" {
-  name                  = "${var.name}-build-task"
+resource "azurerm_container_registry_task" "example" {
+  name                  = var.registrytask_name
   container_registry_id = azurerm_container_registry.acr.id
   platform {
-    os = "Linux"
+    os = var.os_type
   }
 
-  # Use local context instead of Git repo
-  source_location = "."
-
+  # Use Git context with PAT
   docker_step {
-    dockerfile_path = "Dockerfile"
-    image_names     = ["${var.name}/${var.image_name}:latest"]
-    context_path    = "application" # Path to your Docker build context
+    dockerfile_path      = "Dockerfile"
+    context_path         = "https://github.com/ShashwatSwaraj06/task08.git"
+    context_access_token = "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"
+    image_names          = ["${var.name}/${var.image_name}:latest"]
   }
 
   tags = var.tags
 }
 
-# resource "azurerm_container_registry_task_schedule_run_now" "trigger" {
-#   container_registry_task_id = azurerm_container_registry_task.build_task.id
-#   depends_on                 = [azurerm_container_registry_task.build_task]
-# }
+resource "azurerm_container_registry_task_schedule_run_now" "this" {
+  container_registry_task_id = azurerm_container_registry_task.example.id
+}

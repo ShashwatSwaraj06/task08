@@ -1,47 +1,49 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ${name_prefix}-app
+  name: redis-flask-app
+  labels:
+    app: redis-flask-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ${name_prefix}-app
+      app: redis-flask-app
   template:
     metadata:
       labels:
-        app: ${name_prefix}-app
+        app: redis-flask-app
     spec:
       containers:
-      - name: ${name_prefix}-app
-        image: ${image_name}
-        ports:
-        - containerPort: 80
-        env:
-        - name: CREATOR
-          value: "K8S"
-        - name: REDIS_PORT
-          value: "${redis_port}"
-        - name: REDIS_SSL_MODE
-          value: "True"
-        - name: REDIS_URL
-          valueFrom:
-            secretKeyRef:
-              name: redis-secrets
-              key: hostname
-        - name: REDIS_PWD
-          valueFrom:
-            secretKeyRef:
-              name: redis-secrets
-              key: primary-key
-        volumeMounts:
-        - name: secrets-store-inline
-          mountPath: "/mnt/secrets-store"
-          readOnly: true
+        - name: devops
+          image: ${acr_login_server}/${app_image_name}:${image_tag}
+          ports:
+            - containerPort: 8080
+          env:
+            - name: REDIS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: redis-secrets
+                  key: redishostname
+            - name: REDIS_PWD
+              valueFrom:
+                secretKeyRef:
+                  name: redis-secrets
+                  key: redisprimarykey
+            - name: CREATOR
+              value: K8S
+            - name: REDIS_PORT
+              value: "6380"
+            - name: REDIS_SSL_MODE
+              value: "true"
+          volumeMounts:
+            - name: secrets-store-inline
+              mountPath: /mnt/secrets-store
+              readOnly: true
       volumes:
-      - name: secrets-store-inline
-        csi:
-          driver: secrets-store.csi.k8s.io
-          readOnly: true
-          volumeAttributes:
-            secretProviderClass: "azure-kv-${name_prefix}"
+        - name: secrets-store-inline
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: redis-flask-app-kv-integration

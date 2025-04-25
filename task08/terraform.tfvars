@@ -1,4 +1,6 @@
-name_prefix = "cmtr-57d8b090-mod8"
-location    = "eastus"
+location                = "East US"
+container_group_name    = "cmtr-57d8b090-mod8-ci"
+container_registry_name = "cmtr-57d8b090-mod8-cr"
+key_vault_name          = "cmtr-57d8b090-mod8-kv"
 acr_sku     = "Basic"
 creator_tag = "shashwat_swaraj@epam.com"

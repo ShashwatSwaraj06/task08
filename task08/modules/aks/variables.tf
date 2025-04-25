@@ -1,47 +1,51 @@
-variable "name" {
+variable "aks_name" {
+  description = "The name of the AKS cluster"
   type        = string
-  description = "Name of the AKS cluster"
-}
-
-variable "rg_name" {
-  type        = string
-  description = "Name of the resource group where AKS will be deployed"
 }
 
 variable "location" {
+  description = "Azure region"
   type        = string
-  description = "Azure region for the deployment"
+}
+
+variable "resource_group_name" {
+  description = "Resource Group name"
+  type        = string
+}
+
+variable "dns_prefix" {
+  description = "DNS prefix for the AKS cluster"
+  type        = string
 }
 
 variable "node_count" {
+  description = "Number of nodes"
   type        = number
-  description = "Number of nodes in the default node pool"
   default     = 1
 }
 
 variable "vm_size" {
+  description = "VM size for the node pool"
   type        = string
-  description = "Size of the VMs in the node pool"
-  default     = "Standard_D2ads_v5"
+  default     = " Standard_D2ads_v5"
 }
 
-variable "os_disk_type" {
+variable "kubernetes_version" {
+  description = "Kubernetes version"
   type        = string
-  description = "OS disk type for nodes"
-  default     = "Ephemeral"
 }
 
 variable "acr_id" {
+  description = "ID of the ACR for image pull access"
   type        = string
-  description = "ACR resource ID for cluster integration"
 }
 
 variable "key_vault_id" {
+  description = "ID of the Key Vault for secret access"
   type        = string
-  description = "Key Vault resource ID for cluster integration"
 }
 
 variable "tags" {
+  description = "Resource tags"
   type        = map(string)
-  description = "Tags to apply to the AKS cluster"
 }

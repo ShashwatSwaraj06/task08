@@ -1,27 +1,74 @@
-variable "name" {
+variable "container_group_name" {
+  description = "value"
   type        = string
-  description = "Name of the Azure Container Instance"
 }
 
-variable "rg_name" {
+variable "container_name_prefix" {
   type        = string
-  description = "Name of the resource group where ACI will be deployed"
+  description = "Prefix of the container name that's combined with a random value so name is unique in your Azure subscription."
+  default     = "aci"
+}
+
+variable "image" {
+  type        = string
+  description = "Container image to deploy. Should be of the form repoName/imagename:tag for images stored in public Docker Hub, or a fully qualified URI for other registries. Images from private registries require additional registry credentials."
+  default     = "mcr.microsoft.com/azuredocs/aci-helloworld"
+}
+
+variable "port" {
+  type        = number
+  description = "Port to open on the container and the public IP address."
+  default     = 80
+}
+
+variable "cpu_cores" {
+  type        = number
+  description = "The number of CPU cores to allocate to the container."
+  default     = 1
+}
+
+variable "memory_in_gb" {
+  type        = number
+  description = "The amount of memory to allocate to the container in gigabytes."
+  default     = 2
+}
+
+variable "restart_policy" {
+  type        = string
+  description = "The behavior of Azure runtime if container has stopped."
+  default     = "Always"
+  validation {
+    condition     = contains(["Always", "Never", "OnFailure"], var.restart_policy)
+    error_message = "The restart_policy must be one of the following: Always, Never, OnFailure."
+  }
+}
+
+variable "tags" {
+  type        = map(string)
+  description = "creator tag"
+}
+
+# variable "key_vault_id" {
+#   type        = string
+#   description = "value"
+# }
+
+variable "dns_name_label" {
+  type        = string
+  description = "value"
+}
+
+variable "resource_group_name" {
+  description = "Name of the resource group"
+  type        = string
 }
 
 variable "location" {
+  description = "value"
   type        = string
-  description = "Azure region for the deployment"
 }
 
-variable "acr_login_server" {
-  type        = string
-  description = "ACR login server URL for pulling the container image"
-}
 
-variable "image_name" {
-  type        = string
-  description = "Name of the container image to deploy"
-}
 
 variable "redis_hostname" {
   type        = string
@@ -32,9 +79,4 @@ variable "redis_primary_key" {
   type        = string
   sensitive   = true
   description = "Primary access key for Redis"
-}
-
-variable "tags" {
-  type        = map(string)
-  description = "Tags to apply to the container instance"
 }

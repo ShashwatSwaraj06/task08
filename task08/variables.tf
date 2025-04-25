@@ -1,29 +1,27 @@
-variable "name_prefix" {
-  type        = string
-  default     = "cmtr-57d8b090-mod8"
-  description = "Prefix for all resource names"
-}
-
 variable "location" {
   type        = string
-  default     = "eastus"
-  description = "Azure region for resources"
+  description = "location of resource group"
+  default     = "East US"
 }
 
-variable "acr_sku" {
+variable "container_registry_name" {
+  description = "value"
   type        = string
-  default     = "Basic"
-  description = "SKU for Azure Container Registry"
 }
 
-variable "git_pat" {
+
+variable "container_group_name" {
+  description = "value"
   type        = string
-  sensitive   = true
-  description = "GitHub Personal Access Token for ACR build"
 }
 
-variable "creator_tag" {
+variable "name_pattern" {
+  description = "value"
   type        = string
-  default     = "shashwat_swaraj@epam.com"
-  description = "Tag value for Creator"
+  default     = "cmtr-64aed6d7-mod8"
+}
+
+variable "key_vault_name" {
+  description = "value"
+  type        = string
 }

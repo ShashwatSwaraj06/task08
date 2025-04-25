@@ -1,34 +1,37 @@
 variable "name" {
+  description = "The name of the Redis instance"
   type        = string
-  description = "Name of the Redis Cache"
-}
-
-variable "rg_name" {
-  type        = string
-  description = "Name of the resource group where Redis will be deployed"
 }
 
 variable "location" {
+  description = "The Azure region where Redis will be deployed"
   type        = string
-  description = "Azure region for the deployment"
 }
 
-variable "sku_name" {
+variable "resource_group_name" {
+  description = "The name of the resource group"
   type        = string
-  description = "Redis SKU name (Basic, Standard, Premium)"
 }
 
 variable "capacity" {
+  description = "The size of the Redis cache"
   type        = number
-  description = "Redis cache size (1-6 for Basic/Standard, 1-5 for Premium)"
+  default     = 2
 }
 
 variable "family" {
+  description = "The SKU family (C = Basic/Standard, P = Premium)"
   type        = string
-  description = "Redis SKU family (C for Basic/Standard, P for Premium)"
+  default     = "C"
 }
 
-variable "tags" {
-  type        = map(string)
-  description = "Tags to apply to the Redis Cache"
+variable "sku_name" {
+  description = "The SKU name of the Redis cache"
+  type        = string
+  default     = "Basic"
+}
+
+variable "key_vault_id" {
+  description = "ID of the Azure Key Vault to store secrets"
+  type        = string
 }
