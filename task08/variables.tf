@@ -44,3 +44,28 @@ variable "aks_dns_prefix" {
   type        = string
   default     = "aks-cluster"
 }
+
+variable "tags" {
+  description = "Tags to be applied to all resources"
+  type        = map(string)
+}
+
+variable "dns_name_label" {
+  description = "DNS name label for ACI"
+  type        = string
+}
+
+variable "image_name" {
+  description = "Name of the image to be used in ACI"
+  type        = string
+}
+
+variable "cpu" {
+  description = "Number of CPUs for the container"
+  type        = number
+}
+
+variable "memory" {
+  description = "Amount of memory for the container (in GB)"
+  type        = number
+}

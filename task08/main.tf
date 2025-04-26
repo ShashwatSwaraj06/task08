@@ -77,19 +77,21 @@ module "aks" {
 
 
 module "aci" {
-  source = "./modules/aci"
+  source      = "./modules/aci"
+  name_prefix = var.name_prefix
+  location    = var.location
 
-  name                = "${local.name_prefix}-aci"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
+  # Add missing required argument
+  tags = local.tags # This will use the tags defined in locals.tf
 
-  container_name    = local.container_name
-  dns_name_label    = "${local.name_prefix}-aci"
-  image             = "${module.acr.login_server}/${local.image_name}:latest"
-  cpu               = 1
-  memory            = 1.5
-  redis_hostname    = module.redis.redis_hostname
-  redis_primary_key = module.redis.redis_primary_key
+  # Other required arguments for ACI
+  dns_name_label    = var.dns_name_label
+  image             = var.image_name
+  redis_hostname    = module.redis.hostname
+  redis_primary_key = module.redis.primary_key
+  container_name    = local.aci_name
+  cpu               = var.cpu
+  memory            = var.memory
 }
 
 
