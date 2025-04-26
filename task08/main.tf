@@ -66,16 +66,21 @@ module "aks" {
 }
 
 module "aci" {
-  source                        = "./modules/aci"
-  name                          = local.aci_name
-  location                      = var.location
-  resource_group_name           = azurerm_resource_group.this.name
-  tags                          = local.tags
-  container_image               = "${module.acr.login_server}/${local.image_name}:latest"
-  keyvault_name                 = module.keyvault.keyvault_uri
-  redis_hostname_secret_name    = "redis-hostname"
-  redis_primary_key_secret_name = "redis-primary-key"
+  source = "./modules/aci"
+
+  name                = "${local.name_prefix}-aci"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+
+  container_name    = local.container_name
+  dns_name_label    = "${local.name_prefix}-aci"
+  image             = "${module.acr.login_server}/${local.image_name}:latest"
+  cpu               = 1
+  memory            = 1.5
+  redis_hostname    = module.redis.redis_hostname
+  redis_primary_key = module.redis.redis_primary_key
 }
+
 
 resource "kubectl_manifest" "redis_secret_provider" {
   yaml_body = templatefile("${path.module}/k8s-manifests/secret-provider.yaml.tftpl", {
