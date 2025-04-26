@@ -56,14 +56,22 @@ module "acr" {
 }
 
 module "aks" {
-  source              = "./modules/aks"
-  name                = local.aks_name
+  source = "./modules/aks"
+
+  # Required arguments
+  default_node_pool_node_count   = var.aks_node_pool_node_count   # Number of nodes in the default node pool
+  default_node_pool_vm_size      = var.aks_node_pool_vm_size      # VM size for nodes in the default node pool
+  default_node_pool_os_disk_type = var.aks_node_pool_os_disk_type # OS disk type for nodes in the default node pool
+  default_node_pool_name         = var.aks_node_pool_name         # Name of the default node pool
+  dns_prefix                     = var.aks_dns_prefix             # DNS prefix for the AKS cluster
+
+  # Other arguments that you might have in your AKS module
+  resource_group_name = module.rg.rg_name
   location            = var.location
-  resource_group_name = azurerm_resource_group.this.name
-  tags                = local.tags
-  acr_id              = module.acr.acr_id
-  keyvault_id         = module.keyvault.keyvault_id
+  kubernetes_version  = var.kubernetes_version
+  enable_rbac         = true
 }
+
 
 module "aci" {
   source = "./modules/aci"
