@@ -1,10 +1,9 @@
 output "aci_fqdn" {
-  description = "FQDN of the App running in Azure Container Instance"
+  description = "The FQDN of the Azure Container Instance"
   value       = module.aci.fqdn
 }
 
 output "aks_lb_ip" {
-  description = "Load Balancer IP address of the App running in AKS"
-  value       = module.aks.kube_config
-  sensitive   = true
+  description = "The external LoadBalancer IP of the AKS application"
+  value       = data.kubernetes_service.app_service.status[0].load_balancer[0].ingress[0].ip
 }

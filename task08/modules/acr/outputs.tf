@@ -1,9 +1,9 @@
-output "acr_id" {
-  value       = azurerm_container_registry.acr.id
-  description = "value"
+output "acr_login_server" {
+  description = "ACR Login Server URL"
+  value       = azurerm_container_registry.this.login_server
 }
 
-output "login_server" {
-  value       = azurerm_container_registry.acr.login_server
-  description = "value"
+output "acr_id" {
+  description = "ACR Resource ID"
+  value       = azurerm_container_registry.this.id
 }

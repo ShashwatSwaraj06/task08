@@ -1,82 +1,56 @@
-variable "container_group_name" {
-  description = "value"
-  type        = string
-}
-
-variable "container_name_prefix" {
-  type        = string
-  description = "Prefix of the container name that's combined with a random value so name is unique in your Azure subscription."
-  default     = "aci"
-}
-
-variable "image" {
-  type        = string
-  description = "Container image to deploy. Should be of the form repoName/imagename:tag for images stored in public Docker Hub, or a fully qualified URI for other registries. Images from private registries require additional registry credentials."
-  default     = "mcr.microsoft.com/azuredocs/aci-helloworld"
-}
-
-variable "port" {
-  type        = number
-  description = "Port to open on the container and the public IP address."
-  default     = 80
-}
-
-variable "cpu_cores" {
-  type        = number
-  description = "The number of CPU cores to allocate to the container."
-  default     = 1
-}
-
-variable "memory_in_gb" {
-  type        = number
-  description = "The amount of memory to allocate to the container in gigabytes."
-  default     = 2
-}
-
-variable "restart_policy" {
-  type        = string
-  description = "The behavior of Azure runtime if container has stopped."
-  default     = "Always"
-  validation {
-    condition     = contains(["Always", "Never", "OnFailure"], var.restart_policy)
-    error_message = "The restart_policy must be one of the following: Always, Never, OnFailure."
-  }
-}
-
-variable "tags" {
-  type        = map(string)
-  description = "creator tag"
-}
-
-# variable "key_vault_id" {
-#   type        = string
-#   description = "value"
-# }
-
-variable "dns_name_label" {
-  type        = string
-  description = "value"
-}
-
-variable "resource_group_name" {
-  description = "Name of the resource group"
+variable "name" {
+  description = "Name of the Azure Container Group (ACI)"
   type        = string
 }
 
 variable "location" {
-  description = "value"
+  description = "Azure region for the ACI"
   type        = string
 }
 
+variable "resource_group_name" {
+  description = "Resource Group for ACI"
+  type        = string
+}
 
+variable "dns_name_label" {
+  description = "DNS label for accessing the container group publicly"
+  type        = string
+}
+
+variable "container_name" {
+  description = "Name of the container inside ACI"
+  type        = string
+}
+
+variable "image" {
+  description = "Docker Image to deploy in the container group"
+  type        = string
+}
+
+variable "cpu" {
+  description = "CPU cores for container"
+  type        = number
+}
+
+variable "memory" {
+  description = "Memory (in GB) for container"
+  type        = number
+}
+
+variable "tags" {
+  description = "Tags for ACI resource"
+  type        = map(string)
+}
 
 variable "redis_hostname" {
+  description = "Redis hostname for secure environment variable"
   type        = string
-  description = "Redis hostname for the application"
+  sensitive   = true
 }
 
 variable "redis_primary_key" {
+  description = "Redis primary key for secure environment variable"
   type        = string
   sensitive   = true
-  description = "Primary access key for Redis"
 }

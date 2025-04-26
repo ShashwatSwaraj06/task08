@@ -1,27 +1,19 @@
-from flask import Flask
-from redis import Redis, RedisError
 import os
-import socket
-
-# Connect to Redis
-redis = Redis(host=os.getenv("REDIS_URL","localhost"),
-port=os.getenv("REDIS_PORT","6379"), db=0, password=os.getenv("REDIS_PWD",""),
-ssl=os.getenv("REDIS_SSL_MODE","true"))
+import redis
+from flask import Flask
 
 app = Flask(__name__)
 
-@app.route("/")
+REDIS_HOST = os.environ.get('REDIS_URL')
+REDIS_PORT = int(os.environ.get('REDIS_PORT', 6380))
+REDIS_PASSWORD = os.environ.get('REDIS_PWD')
+REDIS_SSL = os.environ.get('REDIS_SSL_MODE', 'False') == 'True'
+
+r = redis.StrictRedis(host=REDIS_HOST, port=REDIS_PORT, password=REDIS_PASSWORD, ssl=REDIS_SSL)
+
+@app.route('/')
 def hello():
-    try:
-        visits = redis.incr("counter")
-    except RedisError:
-        visits = "<i>cannot connect to Redis, counter disabled</i>"
-
-    html = """<h3>Hello from {name}!</h3>
-              <b>Hostname:</b> {hostname}<br/>
-              <b>Visits:</b> {visits}"""
-    return html.format(name=os.getenv("CREATOR"), hostname=socket.gethostname(),
-visits=visits)
-
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=8080)
+    r.incr('visits')
+    visits = r.get('visits').decode('utf-8')
+    source = os.environ.get('CREATOR', 'Unknown')
+    return f"Hello from {source}. Visits: {visits}"

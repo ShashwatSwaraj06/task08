@@ -1,16 +1,15 @@
-# locals.tf
 locals {
-  common_tags = {
+  name_pattern = "cmtr-57d8b090-mod8"
+
+  rg_name       = "${local.name_pattern}-rg"
+  redis_name    = "${local.name_pattern}-redis"
+  keyvault_name = "${local.name_pattern}-kv"
+  acr_name      = replace(local.name_pattern, "-", "") # No hyphens for ACR
+  aks_name      = "${local.name_pattern}-aks"
+  aci_name      = "${local.name_pattern}-ci"
+  image_name    = "${local.name_pattern}-app"
+
+  tags = {
     Creator = "shashwat_swaraj@epam.com"
   }
-
-
-  # Rest of your existing locals
-  rg_name       = "${var.name_prefix}-rg"
-  aci_name      = "${var.name_prefix}-ci"
-  acr_name      = replace("${var.name_prefix}cr", "-", "")
-  aks_name      = "${var.name_prefix}-aks"
-  keyvault_name = "${var.name_prefix}-kv"
-  redis_name    = "${var.name_prefix}-redis"
-  docker_image  = "${var.name_prefix}-app"
 }

@@ -1,51 +1,54 @@
-variable "aks_name" {
-  description = "The name of the AKS cluster"
+variable "name" {
+  description = "Name of the AKS cluster"
   type        = string
 }
 
 variable "location" {
-  description = "Azure region"
+  description = "Azure region for AKS cluster"
   type        = string
 }
 
 variable "resource_group_name" {
-  description = "Resource Group name"
+  description = "Resource Group for AKS"
   type        = string
 }
 
 variable "dns_prefix" {
-  description = "DNS prefix for the AKS cluster"
+  description = "DNS prefix for AKS API server"
   type        = string
 }
 
-variable "node_count" {
-  description = "Number of nodes"
+variable "default_node_pool_name" {
+  description = "Default Node Pool Name"
+  type        = string
+}
+
+variable "default_node_pool_node_count" {
+  description = "Number of nodes in default pool"
   type        = number
-  default     = 1
 }
 
-variable "vm_size" {
-  description = "VM size for the node pool"
-  type        = string
-  default     = " Standard_D2ads_v5"
-}
-
-variable "kubernetes_version" {
-  description = "Kubernetes version"
+variable "default_node_pool_vm_size" {
+  description = "VM Size for nodes"
   type        = string
 }
 
-variable "acr_id" {
-  description = "ID of the ACR for image pull access"
-  type        = string
-}
-
-variable "key_vault_id" {
-  description = "ID of the Key Vault for secret access"
+variable "default_node_pool_os_disk_type" {
+  description = "OS disk type for nodes (Managed or Ephemeral)"
   type        = string
 }
 
 variable "tags" {
-  description = "Resource tags"
+  description = "Tags for AKS resource"
   type        = map(string)
+}
+
+variable "acr_id" {
+  description = "ACR Resource ID for AcrPull permission"
+  type        = string
+}
+
+variable "keyvault_id" {
+  description = "Key Vault ID for granting access to secrets"
+  type        = string
 }

@@ -1,66 +1,46 @@
-resource "azurerm_kubernetes_cluster" "aks_cluster" {
-  name                = var.aks_name
+resource "azurerm_kubernetes_cluster" "this" {
+  name                = var.name
   location            = var.location
   resource_group_name = var.resource_group_name
   dns_prefix          = var.dns_prefix
+  tags                = var.tags
 
   default_node_pool {
-    name         = "system"
-    node_count   = var.node_count
-    vm_size      = var.vm_size
-    os_disk_type = "Ephemeral"
+    name         = var.default_node_pool_name
+    node_count   = var.default_node_pool_node_count
+    vm_size      = var.default_node_pool_vm_size
+    os_disk_type = var.default_node_pool_os_disk_type
   }
 
   identity {
     type = "SystemAssigned"
   }
 
-  key_vault_secrets_provider {
-    secret_rotation_enabled = true
+  network_profile {
+    network_plugin    = "azure"
+    load_balancer_sku = "standard"
   }
 
-  kubernetes_version = var.kubernetes_version
-
-  tags = var.tags
+  storage_profile {
+    blob_driver_enabled         = false
+    disk_driver_enabled         = true
+    file_driver_enabled         = true
+    snapshot_controller_enabled = true
+  }
 }
 
-
-resource "azurerm_user_assigned_identity" "example" {
-  name                = "aks-example-identity"
-  resource_group_name = var.resource_group_name
-  location            = var.location
+resource "azurerm_role_assignment" "acr_pull" {
+  principal_id         = azurerm_kubernetes_cluster.this.kubelet_identity[0].object_id
+  role_definition_name = "AcrPull"
+  scope                = var.acr_id
 }
 
-# Role assignment: Allow AKS to pull from ACR
-resource "azurerm_role_assignment" "aks_acr_pull" {
-  scope                            = var.acr_id
-  role_definition_name             = "AcrPull"
-  principal_id                     = azurerm_user_assigned_identity.example.principal_id
-  skip_service_principal_aad_check = true
-}
-
-
-# Key Vault access policy: Let AKS access secrets
-resource "azurerm_key_vault_access_policy" "aks_kv_access" {
-  key_vault_id = var.key_vault_id
-
-  tenant_id = data.azurerm_client_config.current.tenant_id
-  object_id = data.azurerm_client_config.current.object_id
-
-  key_permissions = [
-    "Get", "List",
-  ]
+resource "azurerm_key_vault_access_policy" "aks_policy" {
+  key_vault_id = var.keyvault_id
+  tenant_id    = azurerm_kubernetes_cluster.this.identity[0].tenant_id
+  object_id    = azurerm_kubernetes_cluster.this.identity[0].principal_id
 
   secret_permissions = [
-    "Get", "List",
+    "Get",
   ]
-}
-
-data "azurerm_client_config" "current" {}
-
-resource "azurerm_role_assignment" "key_vault_secret" {
-  principal_id                     = azurerm_kubernetes_cluster.aks_cluster.kubelet_identity[0].object_id
-  role_definition_name             = "Key Vault Secrets User"
-  scope                            = var.key_vault_id
-  skip_service_principal_aad_check = true
 }

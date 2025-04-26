@@ -1,17 +1,22 @@
-resource "azurerm_container_group" "container" {
-  name                = var.container_group_name
+resource "azurerm_container_group" "this" {
+  name                = var.name
   location            = var.location
   resource_group_name = var.resource_group_name
-  ip_address_type     = "Public"
   os_type             = "Linux"
-  restart_policy      = var.restart_policy
-  sku                 = "Standard"
+  ip_address_type     = "Public"
+  dns_name_label      = var.dns_name_label
+  tags                = var.tags
 
   container {
-    name   = var.container_group_name
+    name   = var.container_name
     image  = var.image
-    cpu    = var.cpu_cores
-    memory = var.memory_in_gb
+    cpu    = var.cpu
+    memory = var.memory
+
+    ports {
+      port     = 80
+      protocol = "TCP"
+    }
 
     environment_variables = {
       CREATOR        = "ACI"
@@ -23,13 +28,5 @@ resource "azurerm_container_group" "container" {
       REDIS_URL = var.redis_hostname
       REDIS_PWD = var.redis_primary_key
     }
-
-    ports {
-      port     = var.port
-      protocol = "TCP"
-    }
   }
-
-  dns_name_label = var.dns_name_label
-  tags           = var.tags
 }
