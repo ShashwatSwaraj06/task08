@@ -14,7 +14,7 @@ locals {
   container_name = "${local.name_pattern}-aci-container" # New container name based on name pattern
 
   # Image name for ACR (Azure Container Registry) -- define the image name using ACR path
-  image_name = "${local.acr_name}.azurecr.io/${local.name_pattern}-app:latest" # Full ACR image name
+  image_name = "${local.name_pattern}-app"
 
   # Tags for all resources
   tags = {
