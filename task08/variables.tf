@@ -14,7 +14,32 @@ variable "name_prefix" {
   type        = string
 }
 
-# AKS Variables
+variable "tags" {
+  description = "Tags to be applied to all resources"
+  type        = map(string)
+}
+
+variable "dns_name_label" {
+  description = "DNS name label for ACI"
+  type        = string
+}
+
+variable "image_name" {
+  description = "Name of the image to be used in ACI"
+  type        = string
+}
+
+variable "cpu" {
+  description = "Number of CPUs for the container"
+  type        = number
+}
+
+variable "memory" {
+  description = "Amount of memory for the container (in GB)"
+  type        = number
+}
+
+# Node pool settings
 variable "aks_node_pool_node_count" {
   description = "The number of nodes in the default node pool"
   type        = number
@@ -45,27 +70,9 @@ variable "aks_dns_prefix" {
   default     = "aks-cluster"
 }
 
-variable "tags" {
-  description = "Tags to be applied to all resources"
-  type        = map(string)
-}
-
-variable "dns_name_label" {
-  description = "DNS name label for ACI"
+variable "resource_group_name" {
+  description = "The name of the resource group"
   type        = string
+  default     = "rg1" # Adjust as needed
 }
 
-variable "image_name" {
-  description = "Name of the image to be used in ACI"
-  type        = string
-}
-
-variable "cpu" {
-  description = "Number of CPUs for the container"
-  type        = number
-}
-
-variable "memory" {
-  description = "Amount of memory for the container (in GB)"
-  type        = number
-}
