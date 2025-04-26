@@ -47,15 +47,16 @@ module "redis" {
 }
 
 module "acr" {
-  source      = "./modules/acr"
-  name_prefix = var.name_prefix
-  location    = var.location
+  source = "./modules/acr"
 
-  # Add the missing arguments
-  sku          = "Basic"                                         # Define the SKU for your ACR (e.g., Basic, Standard, Premium)
-  git_repo_url = "https://github.com/your-repo/your-project.git" # Replace with your GitHub repository URL
-  image_name   = local.image_name                                # This should be set to the image name defined in locals.tf
+  # Required arguments for ACR
+  name                = var.acr_name                     # Set the name of your ACR (can be a variable or hardcoded)
+  location            = var.location                     # Region for ACR
+  resource_group_name = azurerm_resource_group.this.name # Resource group name
+  tags                = var.tags                         # Tags for the ACR resources
+  git_pat             = var.git_pat                      # GitHub Personal Access Token
 }
+
 
 
 module "aks" {

@@ -76,3 +76,18 @@ variable "resource_group_name" {
   default     = "rg1" # Adjust as needed
 }
 
+variable "acr_name" {
+  description = "The name of the Azure Container Registry"
+  type        = string
+}
+
+variable "tags" {
+  description = "Tags to be applied to all resources"
+  type        = map(string)
+}
+
+variable "git_pat" {
+  description = "GitHub Personal Access Token for ACR tasks"
+  type        = string
+  sensitive   = true
+}
