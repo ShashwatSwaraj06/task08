@@ -1,5 +1,5 @@
 locals {
-  name_pattern = "cmtr-57d8b090-mod8"
+  name_pattern = var.name_prefix
 
   rg_name       = "${local.name_pattern}-rg"
   redis_name    = "${local.name_pattern}-redis"
