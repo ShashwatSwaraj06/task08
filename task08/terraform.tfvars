@@ -23,3 +23,10 @@ aks_node_pool_vm_size      = "Standard_DS2_v2"
 aks_node_pool_os_disk_type = "Managed"
 aks_node_pool_name         = "default"
 aks_dns_prefix             = "aks-cluster" # Prefix used in DNS for AKS
+
+# Tags to be applied to all resources
+tags = {
+  Creator     = "shashwat_swaraj@epam.com"
+  Project     = "CMTR"
+  Environment = "Development"
+}
