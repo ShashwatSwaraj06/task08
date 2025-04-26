@@ -59,21 +59,21 @@ module "acr" {
 
 
 module "aks" {
-  source = "./modules/aks"
+  source      = "./modules/aks"
+  name_prefix = var.name_prefix
+  location    = var.location
 
-  # Required arguments
-  default_node_pool_node_count   = var.aks_node_pool_node_count   # Number of nodes in the default node pool
-  default_node_pool_vm_size      = var.aks_node_pool_vm_size      # VM size for nodes in the default node pool
-  default_node_pool_os_disk_type = var.aks_node_pool_os_disk_type # OS disk type for nodes in the default node pool
-  default_node_pool_name         = var.aks_node_pool_name         # Name of the default node pool
-  dns_prefix                     = var.aks_dns_prefix             # DNS prefix for the AKS cluster
+  # Required arguments for AKS
+  name        = local.aks_name     # This will use the name defined in locals.tf
+  tags        = local.tags         # This will use the tags defined in locals.tf
+  acr_id      = module.acr.id      # Assuming the ACR module outputs the ID of the registry
+  keyvault_id = module.keyvault.id # Assuming the KeyVault module outputs the ID of the Key Vault
 
-  # Other arguments that you might have in your AKS module
-  resource_group_name = module.rg.rg_name
-  location            = var.location
-  kubernetes_version  = var.kubernetes_version
-  enable_rbac         = true
+  # Remove unsupported arguments (optional)
+  # kubernetes_version = var.kubernetes_version   # Remove this line
+  # enable_rbac        = true                      # Remove this line
 }
+
 
 
 module "aci" {
